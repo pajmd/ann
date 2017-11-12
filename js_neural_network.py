@@ -21,10 +21,10 @@ class js_neural_network(object):
         self.iterations = iterations
         self.weights = []
 
-    def learn(self, examples): # examples [{imput: [], output: []}]
+    def learn(self, examples, default_weight=None): # examples [{imput: [], output: []}]
         examples = self.normalize(examples)
         if not self.weights:
-            self.setup(examples)
+            self.setup(examples, default_weight)
         for i in range(self.iterations):
             results = self.forward(examples)
             errors = self.back(examples, results)
@@ -46,7 +46,7 @@ class js_neural_network(object):
         results.append(res)
 
         # hidden -> hidden
-        for i in range(self.hidden_layers):
+        for i in range(1, self.hidden_layers):
             res = sum(results[i]['result'], self.weights[i+1])
             results.append(res)
 
@@ -58,18 +58,18 @@ class js_neural_network(object):
     def back(self, examples, results):
         # output -> hidden
         errors = examples['output'] - results[len(results) -1]['result']
-        deltas = sigmoid_prime(results[len(results)-1]['result']['sum']) * errors
-        changes = np.dot(deltas, results[self.hidden_layers -1]['result'].tanspose()) * self.learning_rate
-        self.weights[len(self.weights - 1)] = self.weights[len(self.weights - 1)] + changes
+        deltas = sigmoid_prime(results[len(results)-1]['sum']) * errors
+        changes = np.dot( results[self.hidden_layers -1]['result'].transpose(), deltas) * self.learning_rate
+        self.weights[len(self.weights) - 1] = self.weights[len(self.weights) - 1] + changes
         # hidden -> hidden
-        for i in range(start=1, stop=self.hidden_layers):
+        for i in range(1, self.hidden_layers): # TO FIX
             deltas = np.dot(self.weights[len(self.weights) - i].trnspose(), deltas) \
                      * sigmoid_prime(results[len(results) - (i+1)]['sum'])
             changes = np.dot(deltas, results[self.hidden_layers -(i + 1)]['result'].tanspose()) * self.learning_rate
             self.weights[len(self.weights) - (i + 1)] = self.weights[len(self.weights - (i + 1))] + changes
         # hidden -> input
-        deltas = np.dot(self.weights[0].transpose(), deltas ) * sigmoid_prime(results[0]['sum'])
-        changes = np.dot(deltas, examples['input'].transpose()) * self.learning_rate
+        deltas = np.dot(deltas , self.weights[1].transpose()) * sigmoid_prime(results[0]['sum'])
+        changes = np.dot(examples['input'].transpose(), deltas) * self.learning_rate
         self.weights[0] = self.weights[0] + changes
         return errors
 
@@ -82,24 +82,24 @@ class js_neural_network(object):
         if default_weight:
             if type(default_weight) == float:
                 # input hidden weights matrix
-                self.weights.append(np.array([[default_weight] * len(examples['input'][0])] * self.hidden_units))
+                self.weights.append(np.array([[default_weight] * self.hidden_units] * len(examples['input'][0])))
                 # hidden hidden weights matrix
                 for _ in range(1, self.hidden_layers):
                     self.weights.append(np.array([[default_weight] * self.hidden_units] * self.hidden_units))
                 # hidden output eights matrix
-                self.weights.append(np.array([[default_weight] * self.hidden_units] * len(examples['output'][0])))
+                self.weights.append(np.array([[default_weight] * len(examples['output'][0])] * self.hidden_units))
             else:
                 raise ValueError('default weight must be a float')
         else:
             # input hidden weights matrix
-            self.weights.append(np.random.random_sample((self.hidden_units, len(examples['input'][0]))))
+            self.weights.append(np.random.random_sample((len(examples['input'][0]), self.hidden_units)))
 
             # hidden hidden weights matrix
             for _ in range(1, self.hidden_layers):
                 self.weights.append(np.random.random_sample((self.hidden_units, self.hidden_units)))
 
             # hidden output eights matrix
-            self.weights.append(np.random.random_sample((len(examples['output'][0]), self.hidden_units)))
+            self.weights.append(np.random.random_sample((self.hidden_units, len(examples['output'][0]))))
 
     @staticmethod
     def normalize(data):

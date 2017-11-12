@@ -85,48 +85,10 @@ def test_setup_2_3_1():
     examples = nn.normalize(data)
     nn.setup(examples=examples, default_weight=0.1)
     assert len(nn.weights) == 2
-    np.testing.assert_array_equal(nn.weights[0], np.array([[0.1, 0.1], [0.1, 0.1], [0.1, 0.1]]))
-    np.testing.assert_array_equal(nn.weights[1], np.array([[0.1, 0.1, 0.1]]))
-    assert nn.weights[0].shape == (3,2)
-    assert nn.weights[1].shape == (1,3)
-
-
-def test_setup_2_3_2():
-    nn = js_neural_network()
-    # data = [{imput: [], output: []}]
-    data = [
-        { 'input': [1, 1], 'output': [0, 1] },
-        { 'input': [1, 0], 'output': [1, 0] },
-        { 'input': [0, 1], 'output': [1, 0] },
-        { 'input': [0, 0], 'output': [0, 1] }
-    ]
-    examples = nn.normalize(data)
-    nn.setup(examples=examples, default_weight=0.1)
-    assert len(nn.weights) == 2
-    np.testing.assert_array_equal(nn.weights[0], np.array([[0.1, 0.1], [0.1, 0.1], [0.1, 0.1]]))
-    np.testing.assert_array_equal(nn.weights[1], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
-    assert nn.weights[0].shape == (3,2)
-    assert nn.weights[1].shape == (2,3)
-
-
-def test_setup_2_3_3_2():
-    nn = js_neural_network(hidden_layers=2)
-    # data = [{imput: [], output: []}]
-    data = [
-        { 'input': [1, 1], 'output': [0, 1] },
-        { 'input': [1, 0], 'output': [1, 0] },
-        { 'input': [0, 1], 'output': [1, 0] },
-        { 'input': [0, 0], 'output': [0, 1] }
-    ]
-    examples = nn.normalize(data)
-    nn.setup(examples=examples, default_weight=0.1)
-    assert len(nn.weights) == 3
-    np.testing.assert_array_equal(nn.weights[0], np.array([[0.1, 0.1], [0.1, 0.1], [0.1, 0.1]]))
-    np.testing.assert_array_equal(nn.weights[1], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
-    np.testing.assert_array_equal(nn.weights[2], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
-    assert nn.weights[0].shape == (3,2)
-    assert nn.weights[1].shape == (3,3)
-    assert nn.weights[2].shape == (2,3)
+    np.testing.assert_array_equal(nn.weights[0], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
+    np.testing.assert_array_equal(nn.weights[1], np.array([[0.1], [0.1], [0.1]]))
+    assert nn.weights[0].shape == (2,3)
+    assert nn.weights[1].shape == (3,1)
 
 
 def test_setup_2_3_1_random_weight():
@@ -145,6 +107,24 @@ def test_setup_2_3_1_random_weight():
     assert nn.weights[1].shape == (1,3)
 
 
+def test_setup_2_3_2():
+    nn = js_neural_network()
+    # data = [{imput: [], output: []}]
+    data = [
+        { 'input': [1, 1], 'output': [0, 1] },
+        { 'input': [1, 0], 'output': [1, 0] },
+        { 'input': [0, 1], 'output': [1, 0] },
+        { 'input': [0, 0], 'output': [0, 1] }
+    ]
+    examples = nn.normalize(data)
+    nn.setup(examples=examples, default_weight=0.1)
+    assert len(nn.weights) == 2
+    np.testing.assert_array_equal(nn.weights[0], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
+    np.testing.assert_array_equal(nn.weights[1], np.array([[0.1, 0.1], [0.1, 0.1], [0.1, 0.1]]))
+    assert nn.weights[0].shape == (2,3)
+    assert nn.weights[1].shape == (3,2)
+
+
 def test_setup_2_3_2_random_weight():
     nn = js_neural_network()
     # data = [{imput: [], output: []}]
@@ -159,6 +139,26 @@ def test_setup_2_3_2_random_weight():
     assert len(nn.weights) == 2
     assert nn.weights[0].shape == (3,2)
     assert nn.weights[1].shape == (2,3)
+
+
+def test_setup_2_3_3_2():
+    nn = js_neural_network(hidden_layers=2)
+    # data = [{imput: [], output: []}]
+    data = [
+        { 'input': [1, 1], 'output': [0, 1] },
+        { 'input': [1, 0], 'output': [1, 0] },
+        { 'input': [0, 1], 'output': [1, 0] },
+        { 'input': [0, 0], 'output': [0, 1] }
+    ]
+    examples = nn.normalize(data)
+    nn.setup(examples=examples, default_weight=0.1)
+    assert len(nn.weights) == 3
+    np.testing.assert_array_equal(nn.weights[0], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
+    np.testing.assert_array_equal(nn.weights[1], np.array([[0.1, 0.1, 0.1], [0.1, 0.1, 0.1], [0.1, 0.1, 0.1]]))
+    np.testing.assert_array_equal(nn.weights[2], np.array([[0.1, 0.1], [0.1, 0.1], [0.1, 0.1]]))
+    assert nn.weights[0].shape == (2,3)
+    assert nn.weights[1].shape == (3,3)
+    assert nn.weights[2].shape == (3,2)
 
 
 def test_setup_2_3_3_2_random_weight():
@@ -176,3 +176,20 @@ def test_setup_2_3_3_2_random_weight():
     assert nn.weights[0].shape == (3,2)
     assert nn.weights[1].shape == (3,3)
     assert nn.weights[2].shape == (2,3)
+
+
+def test_xor_2_3_1():
+    nn = js_neural_network() # (iterations=1)
+    # data = [{imput: [], output: []}]
+    data = [
+        { 'input': [1, 1], 'output': [0] },
+        { 'input': [1, 0], 'output': [1] },
+        { 'input': [0, 1], 'output': [1] },
+        { 'input': [0, 0], 'output': [0] }
+    ]
+    # examples = nn.normalize(data)
+    # nn.setup(examples=examples, default_weight=0.1)
+    nn.learn(data) # , default_weight=0.1)
+    to_predict = [1, 0]
+    res  = nn.predict(to_predict)
+    print('Prediction for {} = {}'.format(to_predict, res))
