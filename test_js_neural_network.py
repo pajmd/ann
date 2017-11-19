@@ -193,3 +193,30 @@ def test_xor_2_3_1():
     to_predict = [1, 0]
     res  = nn.predict(to_predict)
     print('Prediction for {} = {}'.format(to_predict, res))
+
+
+def test_or_2_3_3():
+    print('Testing ------- OR --------')
+    nn = js_neural_network() # (iterations=1)
+    # data = [{imput: [], output: []}]
+    data = [
+        { 'input': [1, 1, 1, 1], 'output': [1, 0, 0] },
+        { 'input': [1, 1, 0, 1], 'output': [0, 1, 0] },
+        { 'input': [1, 0, 0, 1], 'output': [0, 0, 1] },
+        # { 'input': [0, 0], 'output': [0, 0, 0] }
+    ]
+    # examples = nn.normalize(data)
+    # nn.setup(examples=examples, default_weight=0.1)
+    nn.learn(data) # , default_weight=0.1)
+    to_predict = [1, 1, 1, 1]
+    res  = nn.predict(to_predict)
+    print('Prediction for {} = {}'.format(to_predict, res))
+    to_predict = [1, 1, 0, 1]
+    res  = nn.predict(to_predict)
+    print('Prediction for {} = {}'.format(to_predict, res))
+    to_predict = [1, 0, 0, 1]
+    res  = nn.predict(to_predict)
+    print('Prediction for {} = {}'.format(to_predict, res))
+    to_predict = [1, 0, 1, 1]
+    res  = nn.predict(to_predict)
+    print('Prediction for {} = {}'.format(to_predict, res))

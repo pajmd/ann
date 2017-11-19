@@ -76,7 +76,7 @@ class js_neural_network(object):
 
     def predict(self, input): # input []
         results = self.forward({'input': np.array(input)})
-        return results[len(results) - 1]['result'][0]
+        return results[len(results) - 1]['result']
 
     def setup(self, examples, default_weight=None):
         if default_weight:
@@ -88,9 +88,17 @@ class js_neural_network(object):
                     self.weights.append(np.array([[default_weight] * self.hidden_units] * self.hidden_units))
                 # hidden output eights matrix
                 self.weights.append(np.array([[default_weight] * len(examples['output'][0])] * self.hidden_units))
+                idx = 1
+                for mtx in self.weights:
+                    for row in range(mtx.shape[0]):
+                        for col in range(mtx.shape[1]):
+                            mtx[row, col] = 0.001 * idx
+                            idx += 1
+                pass
             else:
                 raise ValueError('default weight must be a float')
         else:
+            np.random.seed(2)
             # input hidden weights matrix
             self.weights.append(np.random.random_sample((len(examples['input'][0]), self.hidden_units)))
 
