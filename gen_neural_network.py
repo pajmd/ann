@@ -21,8 +21,9 @@ class js_neural_network(object):
         self.iterations = iterations
         self.weights = []
 
-    def learn(self, examples, default_weight=None): # examples [{imput: [], output: []}]
-        examples = self.normalize(examples)
+    def learn(self, examples, default_weight=None, normalize_data=False): # examples [{imput: [], output: []}]
+        if not normalize_data:
+            examples = self.normalize(examples)
         if not self.weights:
             self.setup(examples, default_weight)
         for i in range(self.iterations):
@@ -89,11 +90,11 @@ class js_neural_network(object):
                 # hidden output eights matrix
                 self.weights.append(np.array([[default_weight] * len(examples['output'][0])] * self.hidden_units))
                 idx = 1
-                for mtx in self.weights:
-                    for row in range(mtx.shape[0]):
-                        for col in range(mtx.shape[1]):
-                            mtx[row, col] = 0.001 * idx
-                            idx += 1
+                # for mtx in self.weights:
+                #     for row in range(mtx.shape[0]):
+                #         for col in range(mtx.shape[1]):
+                #             mtx[row, col] = 0.001 * idx
+                #             idx += 1
                 pass
             else:
                 raise ValueError('default weight must be a float')

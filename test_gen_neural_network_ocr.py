@@ -1,4 +1,4 @@
-from js_neural_network import js_neural_network
+from gen_neural_network import js_neural_network
 
 
 def character(glyph):

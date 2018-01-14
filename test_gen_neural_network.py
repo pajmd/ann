@@ -1,5 +1,5 @@
 import numpy as np
-from js_neural_network import sigmoid, js_neural_network
+from gen_neural_network import sigmoid, js_neural_network
 
 def test_dot():
     i = np.array([0.1,0.2], dtype=float)
